@@ -1,3 +1,18 @@
+https://ru.legacy.reactjs.org/docs/create-a-new-react-app.html
+
+
+------- Функциональные и классовые компоненты
+
+function Welcome(props) {
+  return <h1>Привет, {props.name}</h1>;
+}
+
+class Welcome extends React.Component {
+  render() {
+    return <h1>Привет, {this.props.name}</h1>;
+  }
+}
+
 ------- Работа со списками и алгоритм согласования
 key={id}
 1. Рект обновляет только те элементы, которые дейчтвительно изменились.(если меняеться родительный элемент(тег),
@@ -6,13 +21,81 @@ key={id}
 3. При работе со списком одиноковых сущностей используйте атрибут key, для правильной работы алгоритмов и
 сильного ускорения приложения.
 
+------- Состояние компонентов
+пропсы только для чтения
+в классовых компонентах 
 
-------- Состояния компонентов
-1. У компонента может быть состояние, которое динамически меняеться.
+class EmployeesListItem extends Component {
+    // Создаем конструктор, нужен для изменения состояний
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            increase: false,
+        }
+    }
+    
+    // создаем медот в видел СТРЕЛОЧНОЙ ФУНКЦИИ
+    onIncrease = () => {
+        this.setState(({increase}) => ({
+            increase: !increase
+        }))
+    }
+
+    render() {
+        const {name, salary} = this.props; // данные из пропсов
+        const {increase} = this.state; // данные из состояния (state)
+
+        let classNames = 'list';
+        if (increase) {
+            classNames += ' increase';
+        }
+    
+        return (
+            <li className={classNames}>
+                <span className="list">{name}</span>
+                <input type="text"defaultValue={salary + '$'}/>
+                <div>
+                    <button type="button"
+                        onClick={this.onIncrease}>
+                        <i className="fas fa-cookie"></i>
+                    </button>
+                </div>
+            </li>
+        )
+    }
+}
+export default EmployeesListItem; 
+
+1. У компонента как классового так и функуионального может быть состояние, которое динамически меняеться.
 2. Оно может быть как у классовых так у функциональных компонентов
-3. State напрямую менять не льзя, только через команду 
+3. State напрямую менять не льзя, только через команду this.setState(({increase}) => ({increase: !increase }))
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            yaers: 30,
+        }
+    }
+
+    onNextYaer = () => {
+        this.setState((state) => ({  // ОБОРАЧИВАЕМ () - заменяем  return
+            yaers: state.yaers + 1
+        }))
+    }
+
+    ИЛИ
+
     setState(state => ({
         code...
     }))
-4. setState - асинхронная операция, для точной и последователной передачи данныйх должны передовать callback
+
+    ВЫЗОВ 
+    onClick={this.onNextYaer}
+    ВЫВОД
+    {this.state.yaers}
+
+4. setState - асинхронная операция, для точной и последователной передачи данныйх должны передовать 
+callback корое возращаеть объект состояния
+елси state не зависит от предыдущего значения, например поле ввода то передаем объект
 5. В команде setState можем менять те данные которые нам нужны, остальные остануться без изменений.
