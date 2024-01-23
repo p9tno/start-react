@@ -18,6 +18,7 @@ class App extends Component {
                 {name: 'Lanzz', salary: 2800, increase: false, id: 3},
             ]
         }
+        this.maxId = 4;
     }
 
     deleteItem = (id) => {
@@ -42,6 +43,22 @@ class App extends Component {
         })
     }
 
+    // Да, пока могут добавляться пустые пользователи. Мы это еще исправим
+    addItem = (name, salary) => {
+        const newItem = {
+            name, 
+            salary,
+            increase: false,
+            id: this.maxId++
+        }
+        this.setState(({data}) => {
+            const newArr = [...data, newItem];
+            return {
+                data: newArr
+            }
+        });
+    }
+
 
 
     render() {
@@ -57,8 +74,11 @@ class App extends Component {
                 </div>
                 <EmployeesList 
                     data={data}
-                    onDelete={this.deleteItem}/>
-                <EmployeesAddForm/>
+                    onDelete={this.deleteItem}
+                    />
+                <EmployeesAddForm
+                    onAdd={this.addItem}
+                    />
             </div>
         )
     }
